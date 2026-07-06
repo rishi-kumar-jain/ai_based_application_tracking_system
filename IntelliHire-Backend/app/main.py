@@ -55,10 +55,6 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",
-        "https://intellifit-dev.incedolabs.com",
-        "https://d3nksvpsiy0sgc.cloudfront.net",        
-        "https://d1p0cj1wb76gt4.cloudfront.net",
-        "https://d3o9oh8187uiw4.cloudfront.net",
        
 
     ],

@@ -1,0 +1,35 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: FastAPI Docker-based Lambda with CI/CD
+
+Parameters:
+  ImageTag:
+    Type: String
+    Default: latest
+    Description: ECR image tag to deploy
+
+Resources:
+  FastApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      Architectures:
+        - x86_64
+      ImageUri: !Sub "039612871466.dkr.ecr.ap-south-1.amazonaws.com/IntelliHire-Backend-Dev:${ImageTag}"
+      ReservedConcurrentExecutions: 40
+      AutoPublishAlias: live                    # ADD
+      ProvisionedConcurrencyConfig:             # ADD
+        ProvisionedConcurrentExecutions: 2      # keeps 2 instances always warm     
+      VpcConfig:
+        SubnetIds:
+          - subnet-06e8baebc567e6ed5
+          - subnet-011ef28e0296763b2
+          - subnet-07925a54e03fbeb2f
+        SecurityGroupIds:
+          - sg-0e54eb4e3cdc3d82e
+      "MemorySize": 2048
+      "Timeout": 900
+    Metadata:
+      Dockerfile: Dockerfile
+      DockerContext: .
+      DockerTag: !Ref ImageTag
